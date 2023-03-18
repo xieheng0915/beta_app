@@ -9,6 +9,11 @@
     "turbolinks": "^5.2.0"
   },
   "version": "0.1.0",
+  "engines": {
+    "node": "14.x",
+    "npm": "6.x",
+    "yarn": "1.x"
+  },
   "devDependencies": {
     "webpack-dev-server": "^4.12.0"
   }
