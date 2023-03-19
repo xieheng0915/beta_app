@@ -532,6 +532,15 @@ and
     heroku rename your_app_name
   ```
 
+  ##### Routing update work 
+  ```
+  git add -A
+  git commit -m "commit comments"
+  git push origin master //to github repo
+  git push heroku master //to heroku repo
+  heroku run rails db:migrate //if any update on database, don't forget this step
+  ```
+
 
 
 
