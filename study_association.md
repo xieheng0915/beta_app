@@ -59,3 +59,30 @@ belongs_to :user
 >article.user
 ```
 
+###### Add bcrypt feature
+- enable gem bcrypt in gemfile
+```
+gem 'bcrypt', '~> 3.1.7'
+```
+- run "bundle install"
+- add "add_secure_password" in user.rb
+- run "rails generate migration add_password_digest_to_users"
+- open new created migration file, add: 
+```
+class AddPasswordDigestToUsers < ActiveRecord::Migration[6.0]
+  def change
+    add_column :users, :password_digest, :string
+  end
+end
+```
+- run "rails db:migrate"
+- run "rails c", check "User.all", confirm password_digest column is generated.
+```
+BCrypt::Password.create("password123") //check it is converted to hash pwd
+user=User.first
+user.password="password123"
+user.save //check password is converted to hash automatically
+user.authenticate("wrongpassword") //check returned false
+user.authenticate("password") //check returned user object
+```
+
