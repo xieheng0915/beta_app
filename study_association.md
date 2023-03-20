@@ -1,4 +1,4 @@
-##### continuously develop after release as product
+###### continuously develop after release as product
 - (1) Suppose the website has released and after that new features continuously developed and released, in that case, we create branches in git, after test, merge branch to master.
 ```
 git branch -b feature-new
@@ -40,3 +40,22 @@ git branch -D feature-new //to delete a branch not merged to master
 ```
 [Validate for rails:](https://guides.rubyonrails.org/active_record_validations.html)
 [A tester to test email regex validation](https://rubular.com/)
+
+###### association: one-to-many
+- user : 1<->* : articles, 
+In user.rb, add:  
+```
+has_many :articles
+```
+In article.rb, add: 
+```
+belongs_to :user
+```
+- run "rails c" 
+```
+>article = Article.first
+>user.articles << article
+>user.article
+>article.user
+```
+
