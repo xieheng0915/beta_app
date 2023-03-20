@@ -1,3 +1,10 @@
+##### Create CRUD features by command.
+
+```
+$ rails generate scaffold <ModelName> <attribute1>:<type1> <attribute2>:<type2> ...
+$ rails generate scaffold Post title:string body:text
+$ rails db:migrate
+```
 ##### Create app general process and create table by hand
 
 + 1: 
