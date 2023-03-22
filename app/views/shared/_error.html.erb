@@ -1,10 +1,10 @@
-<% if @article.errors.any? %>
+<% if obj.errors.any? %>
   <div class="alert alert-danger alert-dismissible fade show" role="alert">
-    <h4 class="alert-heading">The following errors prevent the article to be submitted successfully.</h4>
+    <h4 class="alert-heading">The following errors prevent the <%= obj.class.name.downcase %> to be submitted successfully.</h4>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
-    <% @article.errors.full_messages.each do |msg| %>
+    <% obj.errors.full_messages.each do |msg| %>
       <li><%= msg %></li>
     <% end %>
   </div>  
