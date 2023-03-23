@@ -7,6 +7,7 @@
       <div class="card text-center shadow mb-5 bg-white rounded">
         <div class="card-header font-italic">
           by <%= @article.user.username if @article.user %>
+          <%= link_to gravatar_for(@article.user, size: 50), user_path(@article.user) %>
         </div>
 
         <div class="card-body">

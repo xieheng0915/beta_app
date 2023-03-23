@@ -134,6 +134,35 @@ rails routes --expanded | grep edit
  @articles = @user.articles
 ```
 
+###### add user index page and optimization 
+- (1) To count in rails console, tried to use "Article.count(:conditions => )" according to rails official site, but failed...  
+```
+Article.where(:user_id=>12).count
+```
+- (2) In index page, could use below 
+```
+<p class="card-text"><%= user.articles.count() %> articles </p>
+```
+- (3) For the image, you can just use gravator, but if change to below, the image is clickable and redirect to user's profile  
+```
+<%= link_to gravatar_for(user, size: 150), user  %>
+```
+- (4) add profile page to article show page: in article/show.html.erb, add: 
+```
+<div class="card-header font-italic">
+  by <%= @article.user.username if @article.user %>
+  <%= link_to gravatar_for(@article.user, size: 50), user_path(@article.user) %>
+</div>
+```
+- (5) Add link to articles listing page
+```
+<div class="card-header font-italic">
+  <% if article.user %>
+    by <%= link_to article.user.username, user_path(article.user) %>
+  <% end %>
+</div>
+```
+  
 
 
 
