@@ -1,3 +1,6 @@
+###### resource
+- [email regex confirmation: ](https://rubular.com/)
+- [gravatar: global profile](https://en.gravatar.com/)
 ###### continuously develop after release as product
 - (1) Suppose the website has released and after that new features continuously developed and released, in that case, we create branches in git, after test, merge branch to master.
 ```
@@ -101,4 +104,36 @@ or use
 ```
 resources :users, except: [:new]
 ```
+
+###### add edit page
+All just like edit article page only pay attention below 2 points
+- (1) To find out edit routes, use "|" 
+```
+rails routes --expanded | grep edit
+```
+- (2) When use the same html with signup page, could change submit button to below:
+```_form.html.erb
+<%= f.submit(@user.new_record? ? "Sign up" : "Update account", class: "btn btn-outline-light btn-lg") %>
+```
+
+###### add user profile and show related articles
+- (1) Use gravatar to upload profile image and reuse it.
+[Implement API doc:](https://en.gravatar.com/site/implement/images/ruby/)
+- (2) In app/helpers/application_helper.rb add below code:
+```
+  def gravatar_for(user, options = {size:80})
+    email_address = user.email.downcase
+    hash = Digest::MD5.hexdigest(email_address)
+    size = options[:size]
+    garavatar_url = "https://www.gravatar.com/avatar/#{hash}?s=#{size}"
+    image_tag(garavatar_url, alt:user.username, class: "rounded shadow mx-auto d-block")
+  end
+```
+- (3) move articles list out to _article.html.erb, and in controller, add below source code, to filter out all the related articles:  
+```
+ @articles = @user.articles
+```
+
+
+
 
