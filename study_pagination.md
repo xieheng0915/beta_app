@@ -196,3 +196,131 @@ class ApplicationController < ActionController::Base
 end
 ```
 
+###### Restrict actions from UI
+- (1) articles should be edited and deleted only logged in user and the article author himself, so add the judgement here in _article.html.erb  
+```
+<% if logged_in? && article.user == current_user %>
+  <%= link_to 'Edit', edit_article_path(article), class: "btn btn-outline-info" %>
+  <%= link_to 'Delete', article, method: :delete, data: { confirm: 'Are you sure?'}, class: "btn btn-outline-danger" %>
+<% end %>
+```
+- (2) Same in show.html.erb
+```
+<% if logged_in? && @article.user == current_user %> 
+  <%= link_to 'Edit', edit_article_path(@article), class: "btn btn-outline-info" %>
+  <%= link_to 'Delete', @article, method: :delete, data: { confirm: 'Are you sure?'}, class: "btn btn-outline-danger" %>
+<% end %>
+``` 
+- (3) Same for users page (bloggers list)
+```
+<% if logged_in? && user == current_user %>
+  <%= link_to 'Edit profile', edit_user_path(user), class: "btn btn-outline-info" %>
+<% end %>
+```    
+- (4) And same, do not display "edit your profile" button in other bloggers profile page, in app/view/users/show.html.erb  
+```
+<% if logged_in? && @user == current_user %>
+  <div class="text-center mt-4">
+    <%= link_to "Edit your profile", edit_user_path(@user), class: "btn btn-outline-info" %>
+  </div>
+<% end %>
+```
+
+###### navigation restriction
+- (1) change username to drop down list and add view/edit profile links
+```
+<% if logged_in? %>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+      Profile [<%= current_user.username %>]
+    </a>
+    <div class="dropdown-menu">
+      <%= link_to 'View profile', user_path(current_user), class: "dropdown-item" %>
+      <%= link_to 'Edit profile', edit_user_path(current_user), class: "dropdown-item" %>
+    </div>       
+  </li>
+```
+
+###### restrict access from url 
+- (1) to restrict unloggedin user access for articles
+```application_controller.rb
+  def require_user
+    if !logged_in?
+      flash[:alert] = "You must be logged in to perform this action."
+      redirect_to login_path
+    end
+  end
+```
+in artciles controller, add below code:   
+```articles_controller.rb
+before_action :require_user, except: [:show, :index]
+```
+
+- (2) to ensure articles could only be editted or destroyed by the author, a logged in user couldn't edit/destroy other author's article by direct url access.   
+in articles controller, add: 
+```
+  def require_same_user
+    if current_user != @article.user
+      flash[:notice] = "You can only edit or delete your own article"
+      redirect_to @article
+    end
+  end
+  ```
+  and  
+  ```
+  before_action :set_user, only: [:show, :edit, :update]
+  #check here for require_user, use only not except, because new/create is used for new user signup, should be available without logged in.
+  before_action :require_user, only: [:edit, :update]  
+  before_action :require_same_user, only: [:edit, :update]
+  ```
+  "require_same_user" has be to put after require_user to make sure this action is taken after check logged in status.  
+
+- (3) Same to users 
+```
+  before_action :set_user, only: [:show, :edit, :update]
+  before_action :require_user, except: [:show, :index]
+  before_action :require_same_user, only: [:edit, :update]
+```
+and  
+```
+  def require_same_user
+    if current_user != @user
+      flash[:notice] = "You can only edit or delete your own profile"
+      redirect_to @user
+    end
+  end
+```
+
+###### destroy user 
+- (1) Add an entry link in navigation, use "text-danger" to highlight this link
+```navigation.html.erb
+<%= link_to 'Delete profile', user_path(current_user), class: "dropdown-item text-danger", method: :delete, data: { confirm: "Are you sure"} %>
+```
+- (2) Add destroy action in controller, routes have already generated, so omitted here. 
+```
+  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :require_user, only: [:edit, :update]
+  before_action :require_same_user, only: [:edit, :update, :destroy]
+```
+and  
+```
+  def destroy
+    @user.destroy
+    session[:user_id] = nil
+    flash[:notice] = "Account and all associated articles are deleted successfully."
+    redirect_to root_path
+  end
+```
+- (3) To make sure articles could be deleted accordingly when user is deleted, need to add below code in model: user.rb, to show the dependent relationship of users and articles     
+```
+  has_many :articles, dependent: :destroy
+```  
+
+
+
+
+
+
+
+
+
