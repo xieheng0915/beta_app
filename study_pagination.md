@@ -152,6 +152,47 @@ And for users/index.html.erb
   and delete duplicated code in #show/edit/update
 
 
+###### create article by current user
+- (1) To let the author be the current user, change code in articles_controller
+from  
+```
+@article.user = User.first # this is a temporary solution
+```
+to 
+```
+@article.user = current_user
+```
+- (2) But this couldn't work since helper method can't be accessed by controllers directly, so move current_user def from helper to application_controller instead.
+```
+class ApplicationController < ActionController::Base
+  
+  helper_method :current_user
+  def current_user
+    @current_user ||= User.find(session[:user_id]) if session[:user_id]
+  end
+end
+```
+- (3) To make sure view page could continuously use current_user, add "helper_method :current_user" on top of action in applicaiton controller.
 
-    
+- (4) Same, when user logged in, even he click the logo home icon, he should be redirected to articles listing page instead, only after he logged out, be redirected to the home page with "sign up" button.  
+Therefore, add below code to pages_controller.rb:  
+```
+def home
+  redirect_to articles_path if logged_in?
+end
+```
+- (5) To ensure logged_in could be accessed by all controllers, same as current_user moved from helper to application controller.  
+```
+class ApplicationController < ActionController::Base
+
+  helper_method :current_user, :logged_in?
+  def current_user
+    @current_user ||= User.find(session[:user_id]) if session[:user_id]
+  end
+
+  def logged_in?
+    !!current_user
+  end
+end
+```
 
