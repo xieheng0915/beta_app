@@ -8,3 +8,5 @@ Here are the summary.
 [rails study: associations](study_association.md)  
 [rails study: pagination, authentication](study_pagination.md)  
 [rails study: add admin permissions](add_admin_permit.md)  
+[rails study: push to heroku and operate on heroku](deploy_to_heroku.md)   
+[rails tips: trouble shooting on deployment to heroku](rails_study_tips.md)  
