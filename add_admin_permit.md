@@ -75,7 +75,28 @@ def destroy
 end
 ```
 
+###### to style the Flash Notification Messages with Bootstrap Alerts
+[reference: to stylish the flash notification msgs](https://human-se.github.io/rails-demos-n-deets-2020/demo-bootstrap-alerts/)
 
+- add def in application_helper.rb
+```
+def flash_class(level)
+  bootstrap_alert_class = {
+    "success" => "alert-success",
+    "error" => "alert-danger",
+    "notice" => "alert-info",
+    "alert" => "alert-danger",
+    "warn" => "alert-warning"
+  }
+  bootstrap_alert_class[level]
+end
+```
+
+- change _message.html.erb:  
+```
+<% flash.each do |name,msg| %>
+  <div class="alert <%= flash_class(name) %> alert-dismissible fade show" role="info">
+```
 
 
 

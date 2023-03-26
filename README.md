@@ -7,3 +7,4 @@ Here are the summary.
 [rails study: add style to app](add_styles.md)  
 [rails study: associations](study_association.md)  
 [rails study: pagination, authentication](study_pagination.md)  
+[rails study: add admin permissions](add_admin_permit.md)  
