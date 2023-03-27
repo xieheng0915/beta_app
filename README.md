@@ -10,3 +10,4 @@ Here are the summary.
 [rails study: add admin permissions](add_admin_permit.md)  
 [rails study: push to heroku and operate on heroku](deploy_to_heroku.md)   
 [rails tips: trouble shooting of deployment to heroku](rails_study_tips.md)  
+[rails study: testing driven programing and many-to-many association](testing_and_manyTomany.md)

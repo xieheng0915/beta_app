@@ -401,6 +401,12 @@ reload the webpage, category names are shown under the gravator image.
 - copy left part of new.html.erb to edit.html.erb 
 (refer to source code of new/edit/_form.html.erb)  
 
+_Homework:_
+- Create 2 integration tests
+  - Users sign up process
+  - New article creation process
+  
+
 
 
 
